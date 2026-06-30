@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sepetim | Vitrinim{% endblock %}
+
+{% block content %}
+<div class="py-5">
+    <h2 class="mb-4 text-center">🛒 Sepetim</h2>
+
+    {% if cart.items.exists %}
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+
+            {% for item in cart.items.all %}
+            <div class="row align-items-center mb-3 py-2 border-bottom">
+
+                <!-- ÜRÜN -->
+                <div class="col-md-5 d-flex align-items-center">
+                    {% if item.product.image %}
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}"
+                         class="me-3"
+                         style="width:60px; height:60px; object-fit:cover; border-radius:5px;">
+                    {% else %}
+                    <img src="{% static 'placeholder.png' %}" alt="görsel yok"
+                         class="me-3"
+                         style="width:60px; height:60px; object-fit:cover; border-radius:5px;">
+                    {% endif %}
+
+                    <div>
+                        <strong>{{ item.product.name }}</strong>
+                        <div class="text-muted small">
+                            {{ item.product.price }} ₺ / adet
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ADET -->
+                <div class="col-md-3 d-flex align-items-center gap-2">
+                    <a href="{% url 'vitrinim:decrease_quantity' item.id %}"
+                       class="btn btn-outline-secondary btn-sm">−</a>
+
+                    <span class="px-2 fw-bold">{{ item.quantity }}</span>
+
+                    {% if item.quantity < item.product.stock %}
+                    <a href="{% url 'vitrinim:increase_quantity' item.id %}"
+                       class="btn btn-outline-secondary btn-sm">+</a>
+                    {% else %}
+                    <button class="btn btn-outline-secondary btn-sm" disabled>+</button>
+                    {% endif %}
+                </div>
+
+                <!-- FİYAT -->
+                <div class="col-md-2 text-success fw-semibold">
+                    {{ item.total_price }} ₺
+                </div>
+
+                <!-- SİL -->
+                <div class="col-md-2 text-end">
+                    <a href="{% url 'vitrinim:remove_from_cart' item.id %}"
+                       class="btn btn-outline-danger btn-sm">
+                        🗑
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- TOPLAM -->
+            <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                <h4>Toplam:</h4>
+                <h4 class="text-success">{{ cart.total_price }} ₺</h4>
+            </div>
+
+            <!-- ÖDEME -->
+            <div class="text-end mt-3">
+                <a href="#" class="btn btn-success btn-lg">
+                    Ödeme Yap
+                </a>
+            </div>
+
+        </div>
+    </div>
+    {% else %}
+        <div class="alert alert-warning text-center mt-4">
+            Sepetiniz boş 🫤
+        </div>
+    {% endif %}
+
+    <div class="text-center mt-4">
+        <a href="{% url 'vitrinim:product_list' %}" class="btn btn-outline-primary">
+            ⬅ Alışverişe devam et
+        </a>
+    </div>
+
+</div>
+{% endblock %}
