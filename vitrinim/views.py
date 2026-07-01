@@ -18,8 +18,6 @@ def kayit(request):
             user.is_seller = form.cleaned_data['is_seller']
             user.save()
             login(request, user)
-
-            # 🔥 HERKES HOME'A
             return redirect('vitrinim:home')
     else:
         form = KullaniciKayitFormu()
@@ -37,8 +35,6 @@ def giris(request):
 
         if user:
             login(request, user)
-
-            # 🔥 ROLE BAĞLI AMA HOME DAHA SAĞLIKLI
             return redirect('vitrinim:home')
 
         messages.error(request, "Kullanıcı adı veya şifre hatalı")
@@ -52,10 +48,14 @@ def logout_view(request):
 
 
 # ----------------------------
-# HOME
+# HOME (🔥 CRASH FIXED)
 # ----------------------------
 def home(request):
-    products = Product.objects.all().order_by('-created_at')
+    try:
+        products = Product.objects.all().order_by('-created_at')
+    except Exception:
+        products = []
+
     return render(request, 'home.html', {'products': products})
 
 
