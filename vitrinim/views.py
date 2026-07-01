@@ -18,7 +18,9 @@ def kayit(request):
             user.is_seller = form.cleaned_data['is_seller']
             user.save()
             login(request, user)
-            return redirect('vitrinim:seller_profile' if user.is_seller else 'vitrinim:profile')
+
+            # 🔥 HERKES HOME'A
+            return redirect('vitrinim:home')
     else:
         form = KullaniciKayitFormu()
 
@@ -32,9 +34,12 @@ def giris(request):
             username=request.POST.get('username'),
             password=request.POST.get('password')
         )
+
         if user:
             login(request, user)
-            return redirect('vitrinim:seller_profile' if user.is_seller else 'vitrinim:profile')
+
+            # 🔥 ROLE BAĞLI AMA HOME DAHA SAĞLIKLI
+            return redirect('vitrinim:home')
 
         messages.error(request, "Kullanıcı adı veya şifre hatalı")
 
@@ -50,7 +55,7 @@ def logout_view(request):
 # HOME
 # ----------------------------
 def home(request):
-    products = Product.objects.all()
+    products = Product.objects.all().order_by('-created_at')
     return render(request, 'home.html', {'products': products})
 
 
@@ -101,7 +106,7 @@ def product_list(request):
 
 
 # ----------------------------
-# EDIT PRODUCT (FIXED)
+# EDIT PRODUCT
 # ----------------------------
 @login_required(login_url='vitrinim:giris')
 def edit_product(request, product_id):
@@ -116,7 +121,10 @@ def edit_product(request, product_id):
     else:
         form = ProductForm(instance=product)
 
-    return render(request, 'edit_product.html', {'form': form, 'product': product})
+    return render(request, 'edit_product.html', {
+        'form': form,
+        'product': product
+    })
 
 
 # ----------------------------
@@ -149,7 +157,6 @@ def add_to_cart(request, product_id):
         return redirect('vitrinim:product_list')
 
     product = get_object_or_404(Product, id=product_id)
-
     cart, _ = Cart.objects.get_or_create(user=request.user)
 
     cart_item, created = CartItem.objects.get_or_create(
@@ -163,7 +170,6 @@ def add_to_cart(request, product_id):
         cart_item.quantity += 1
 
     cart_item.save()
-
     return redirect('vitrinim:cart_detail')
 
 
@@ -172,21 +178,16 @@ def remove_from_cart(request, item_id):
     item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
     item.delete()
     return redirect('vitrinim:cart_detail')
-    from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect
-from .models import CartItem
 
 
 @login_required(login_url='vitrinim:giris')
 def increase_quantity(request, item_id):
     item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
 
-    # stok kontrolü
-    if item.quantity >= item.product.stock:
-        return redirect('vitrinim:cart_detail')
+    if item.quantity < item.product.stock:
+        item.quantity += 1
+        item.save()
 
-    item.quantity += 1
-    item.save()
     return redirect('vitrinim:cart_detail')
 
 

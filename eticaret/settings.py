@@ -31,7 +31,7 @@ INSTALLED_APPS = [
 # MIDDLEWARE
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',   # EKLE
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -80,9 +80,11 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
@@ -93,7 +95,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 AUTH_USER_MODEL = 'vitrinim.User'
 
 LOGIN_URL = 'vitrinim:giris'
-LOGIN_REDIRECT_URL = 'vitrinim:profile'
+LOGIN_REDIRECT_URL = 'vitrinim:home'
 LOGOUT_REDIRECT_URL = 'vitrinim:home'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
