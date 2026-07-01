@@ -87,14 +87,22 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-# ---------------- MEDIA (CLOUDINARY) ----------------
+# ---------------- CLOUDINARY ----------------
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'jlbc2g8r',
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# 🔥 CRITICAL FIX (DOĞRU STORAGE SİSTEMİ)
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # ---------------- AUTH ----------------
 AUTH_USER_MODEL = 'vitrinim.User'
