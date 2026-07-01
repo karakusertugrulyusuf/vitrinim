@@ -25,7 +25,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # your app
     'vitrinim',
+
+    # CLOUDINARY
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 # MIDDLEWARE
@@ -89,8 +95,14 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# CLOUDINARY CONFIG
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'jlbc2g8r',
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 AUTH_USER_MODEL = 'vitrinim.User'
 
