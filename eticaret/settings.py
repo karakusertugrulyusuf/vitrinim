@@ -80,7 +80,7 @@ TIME_ZONE = 'Europe/Istanbul'
 USE_I18N = True
 USE_TZ = True
 
-# ---------------- STATIC ----------------
+# ---------------- STATIC FILES ----------------
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -94,7 +94,7 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
-# 🔥 MODERN + STABLE STORAGE SYSTEM
+# 🔥 KRİTİK: EN STABİL YÖNTEM (STORAGES)
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
