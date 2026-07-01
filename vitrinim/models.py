@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from cloudinary_storage.storage import MediaCloudinaryStorage
 
 
 # ----------------------------
@@ -47,7 +48,8 @@ class Product(models.Model):
     )
 
     image = models.ImageField(
-        upload_to='product_images/',
+        storage=MediaCloudinaryStorage(),
+        upload_to="product_images/",
         null=True,
         blank=True
     )
@@ -62,7 +64,10 @@ class Product(models.Model):
 # CART
 # ----------------------------
 class Cart(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -77,8 +82,17 @@ class Cart(models.Model):
 # CART ITEM
 # ----------------------------
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, related_name="items", on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    cart = models.ForeignKey(
+        Cart,
+        related_name="items",
+        on_delete=models.CASCADE
+    )
+
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE
+    )
+
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
