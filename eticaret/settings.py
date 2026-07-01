@@ -94,15 +94,8 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
-# 🔥 CRITICAL FIX (DOĞRU STORAGE SİSTEMİ)
-STORAGES = {
-    "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
+# 🔥 KRİTİK FIX (STABLE YÖNTEM)
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # ---------------- AUTH ----------------
 AUTH_USER_MODEL = 'vitrinim.User'
