@@ -7,6 +7,7 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# ---------------- SECURITY ----------------
 SECRET_KEY = os.environ.get(
     "SECRET_KEY",
     "django-insecure-change-this-in-production"
@@ -16,6 +17,7 @@ DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = ["*"]
 
+# ---------------- APPS ----------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -31,6 +33,7 @@ INSTALLED_APPS = [
     'cloudinary_storage',
 ]
 
+# ---------------- MIDDLEWARE ----------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -44,6 +47,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'eticaret.urls'
 
+# ---------------- TEMPLATES ----------------
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -62,6 +66,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'eticaret.wsgi.application'
 
+# ---------------- DATABASE ----------------
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -69,38 +74,34 @@ DATABASES = {
     }
 }
 
+# ---------------- INTERNATIONAL ----------------
 LANGUAGE_CODE = 'tr-tr'
 TIME_ZONE = 'Europe/Istanbul'
 USE_I18N = True
 USE_TZ = True
 
+# ---------------- STATIC FILES ----------------
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-# 🔥 CLOUDINARY (DOĞRU YAPI)
+# ---------------- MEDIA (CLOUDINARY) ----------------
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'jlbc2g8r',
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
-# ✅ YENİ VE DOĞRU STORAGE AYARI
-STORAGES = {
-    "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+# ---------------- AUTH ----------------
 AUTH_USER_MODEL = 'vitrinim.User'
 
 LOGIN_URL = 'vitrinim:giris'
 LOGIN_REDIRECT_URL = 'vitrinim:home'
 LOGOUT_REDIRECT_URL = 'vitrinim:home'
 
+# ---------------- DEFAULT ----------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
