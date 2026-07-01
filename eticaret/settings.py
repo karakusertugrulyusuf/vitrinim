@@ -80,7 +80,7 @@ TIME_ZONE = 'Europe/Istanbul'
 USE_I18N = True
 USE_TZ = True
 
-# ---------------- STATIC FILES ----------------
+# ---------------- STATIC ----------------
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -89,13 +89,20 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # ---------------- CLOUDINARY ----------------
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'jlbc2g8r',
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'jlbc2g8r'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
-# 🔥 KRİTİK FIX (STABLE YÖNTEM)
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# 🔥 MODERN + STABLE STORAGE SYSTEM
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # ---------------- AUTH ----------------
 AUTH_USER_MODEL = 'vitrinim.User'
